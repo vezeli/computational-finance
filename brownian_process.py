@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from base import Process
-from models import wiener_process
+from src.base import Process
+from src.models import wiener_process
 
 
 class BrownianMotion(Process):

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from base import Process
+from src.base import Process
 
 
 class Poisson(Process):

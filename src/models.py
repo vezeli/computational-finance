@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.stats as st
 
-from utils import UnknownOptionTypeError
+from src.utils import UnknownOptionTypeError
 
 
 def calculate_d1(s, k, tau, sigma, r):

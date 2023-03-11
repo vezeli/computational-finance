@@ -1,5 +1,5 @@
-import models
-import solvers
+import src.models as models
+import src.solvers as solvers
 
 
 def main():

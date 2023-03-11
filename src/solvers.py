@@ -1,4 +1,4 @@
-from models import calculate_option_price, calculate_vega
+from src.models import calculate_option_price, calculate_vega
 
 
 def newton_raphson_method(cp, v_market, s, k, T, t, sigma0, r, eps):
