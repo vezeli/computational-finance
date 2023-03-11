@@ -1,0 +1,2 @@
+class UnknownOptionTypeError(ValueError):
+    pass
