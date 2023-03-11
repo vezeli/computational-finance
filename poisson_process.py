@@ -1,26 +1,17 @@
-from dataclasses import dataclass
-
 import matplotlib.pyplot as plt
 import numpy as np
 
+from base import Process
 
-@dataclass
-class PoissonProcess:
-    _xs: float
-    _t: float
-    dt: float
-    xiP: float
 
-    def __post_init__(self):
-        self.n = np.shape(xs)[0]
+class Poisson(Process):
 
-    def __iter__(self):
-        return self
+    def __init__(self, xiP, **kwargs):
+        self.xiP = xiP
+        super(Poisson, self).__init__(**kwargs)
 
-    def __next__(self):
-        self._xs = self._xs + np.random.poisson(xiP*dt, self.n)
-        self._t = self._t + dt
-        return (self._xs, self._t)
+    def dX(self):
+        return np.random.poisson(xiP*dt, self.paths)
 
 
 if __name__ == "__main__":
@@ -32,7 +23,7 @@ if __name__ == "__main__":
 
     T = 50
     xss, xcss, ts = np.array([xs]), np.array([xcs]), np.array(t) 
-    xt = PoissonProcess(_xs=xs, _t=t, dt=dt, xiP=xiP)
+    xt = Poisson(xiP=xiP, xs=xs, t=t, dt=dt)
     while t < T:
         xs, t = next(xt)
         xss = np.vstack([xss, xs])
