@@ -5,7 +5,6 @@ from src.base import Process
 
 
 class Poisson(Process):
-
     def __init__(self, xiP, **kwargs):
         self.xiP = xiP
         super(Poisson, self).__init__(**kwargs)
@@ -30,16 +29,16 @@ if __name__ == "__main__":
         xcss = np.vstack([xcss, xs-xiP*t])
         ts = np.append(ts, t)
 
-    plt.figure(1)
-    plt.plot(ts, xss)
-    plt.grid()
-    plt.title("Poisson process")
-    plt.xlabel("t")
-    plt.ylabel("X_p")
-    plt.figure(2)
-    plt.plot(ts, xcss)
-    plt.grid()
-    plt.title("Compensated Poisson process")
-    plt.xlabel("t")
-    plt.ylabel("Xc_p")
+    _, (ax1, ax2) = plt.subplots(2,1)
+    ax1.plot(ts, xss)
+    ax1.grid()
+    ax1.set_title("Poisson process")
+    ax1.set_xlabel("t")
+    ax1.set_ylabel("X_p")
+    ax2.plot(ts, xcss)
+    ax2.grid()
+    ax2.set_title("Compensated Poisson process")
+    ax2.set_xlabel("t")
+    ax2.set_ylabel("Xc_p")
+    plt.tight_layout()
     plt.show()
