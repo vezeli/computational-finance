@@ -1,30 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.base import Process
-from src.models import wiener_process
-
-
-class JumpDiffusion(Process):
-    def __init__(self, r, sigma, muJ, sigmaJ, xiP, **kwargs):
-        self.r = r
-        self.sigma = sigma
-        self.muJ = muJ
-        self.sigmaJ = sigmaJ
-        self.xiP = xiP
-        super(JumpDiffusion, self).__init__(**kwargs)
-
-    def dX(self):
-        drift_term = self.dt * (
-            self.r - self.xiP*(np.exp(self.muJ + 1/2*self.sigmaJ**2) - 1) -
-            1/2*self.sigma**2
-        )
-        diffusion_term = self.sigma * np.sqrt(self.dt) * wiener_process(self.paths)
-        jump_term = (
-            np.random.normal(self.muJ, self.sigmaJ, self.paths) *
-            np.random.poisson(self.xiP*self.dt, self.paths)
-        )
-        return drift_term + diffusion_term + jump_term
+from src.processes import StandardJumpDiffusion
 
 
 if __name__ == "__main__":
@@ -38,7 +15,7 @@ if __name__ == "__main__":
 
     T = 5
     xss, pss, ts = np.array([xs]), np.array([ps]), np.array(t) 
-    xt = JumpDiffusion(
+    xt = StandardJumpDiffusion(
         r=r,
         sigma=sigma,
         muJ=muJ,

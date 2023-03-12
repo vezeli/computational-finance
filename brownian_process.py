@@ -1,20 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.base import Process
-from src.models import wiener_process
-
-
-class BrownianMotion(Process):
-    def __init__(self, r, sigma, **kwargs):
-        self.r = r
-        self.sigma = sigma
-        super(BrownianMotion, self).__init__(**kwargs)
-
-    def dX(self):
-        drift = (self.r - 1/2*self.sigma**2)*self.dt
-        diffusion = self.sigma*np.sqrt(self.dt)*wiener_process(self.paths)
-        return drift + diffusion
+from src.processes import BrownianMotion
 
 
 if __name__ == "__main__":

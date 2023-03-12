@@ -1,16 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.base import Process
-
-
-class Poisson(Process):
-    def __init__(self, xiP, **kwargs):
-        self.xiP = xiP
-        super(Poisson, self).__init__(**kwargs)
-
-    def dX(self):
-        return np.random.poisson(xiP*dt, self.paths)
+from src.processes import Poisson
 
 
 if __name__ == "__main__":
