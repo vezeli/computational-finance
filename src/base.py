@@ -16,7 +16,7 @@ def _tau(T, t):
     return T-t
 
 
-def calculate_option_price(cp, s, k, T, t, sigma, r):
+def V(cp, s, k, T, t, sigma, r):
     tau = _tau(T, t)
     d1, d2 = _d1(s, k, tau, sigma, r), _d2(s, k, tau, sigma, r)
     if cp == 1:
@@ -29,7 +29,7 @@ def calculate_option_price(cp, s, k, T, t, sigma, r):
     return rv
 
 
-def calculate_vega(s, k, T, t, sigma, r):
+def dVdS(s, k, T, t, sigma, r):
     tau = _tau(T, t)
     d2 = _d2(s, k, tau, sigma, r)
     return k*np.exp(-r*tau)*st.norm.pdf(d2)*np.sqrt(tau)
