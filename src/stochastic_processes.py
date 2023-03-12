@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.models import dN, dW
+from src.base import dN, dW
 
 
 class _Process:

@@ -1,5 +1,5 @@
-import src.models as models
-import src.solvers as solvers
+from src.base import calculate_option_price
+from src.numerics import newton_raphson_method
 
 
 def main():
@@ -10,8 +10,8 @@ def main():
     r = 0.05
     s0, epsilon = 0.15, 1E-10
 
-    sigma_i = solvers.newton_raphson_method(cp, v, s, k, T, t, s0, r, epsilon)
-    bsm_v = models.calculate_option_price(cp, s, k, T, t, sigma_i, r)
+    sigma_i = newton_raphson_method(cp, v, s, k, T, t, s0, r, epsilon)
+    bsm_v = calculate_option_price(cp, s, k, T, t, sigma_i, r)
 
     print(f"Implied volatility: {round(sigma_i, 4)}")
     print(f"Market price: {round(v, 2)}")

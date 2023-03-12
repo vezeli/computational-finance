@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.processes import Poisson
+from src.stochastic_processes import Poisson
 
 
 if __name__ == "__main__":

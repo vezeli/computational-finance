@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.processes import BrownianMotion
+from src.stochastic_processes import BrownianMotion
 
 
 if __name__ == "__main__":

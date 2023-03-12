@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.processes import StandardJumpDiffusion
+from src.stochastic_processes import StandardJumpDiffusion
 
 
 if __name__ == "__main__":
