@@ -1,22 +1,32 @@
 from src.base import V
 from src.numerics import newton_raphson_method
 
+OPTION = 1
+PRICE = 5.00
+UNDERLYING_PRICE = 100.00
+STRIKE = 120.00
+START_TIME, END_TIME = 0, 1
+RISKFREE_RATE = 0.05
+INITIAL_VOLATILITY = 0.15
 
-def main():
-    cp = 1 # call: cp=1; put: cp=-1
-    v = 5.0
-    s, k = 100, 120
-    t, T = 0, 1
-    r = 0.05
-    s0 = 0.15
-
-    sigma_i = newton_raphson_method(cp, v, s, k, T, t, s0, r)
-    bsm_v = V(cp, s, k, T, t, sigma_i, r)
-
-    print(f"Implied volatility: {round(sigma_i, 4)}")
-    print(f"Market price: {round(v, 2)}")
-    print(f"Theoretical price: {round(bsm_v, 2)}")
-
-
-if __name__ == "__main__":
-    main()
+print(f"Market option price: {round(PRICE, 2)}")
+implied_volatility = newton_raphson_method(
+    OPTION,
+    PRICE,
+    UNDERLYING_PRICE,
+    STRIKE,
+    END_TIME,
+    START_TIME,
+    INITIAL_VOLATILITY,
+    RISKFREE_RATE
+)
+print(f"Implied volatility: {round(implied_volatility, 4)}")
+bsm_v = V(
+    OPTION,
+    UNDERLYING_PRICE,
+    STRIKE,
+    END_TIME,
+    START_TIME,
+    implied_volatility,
+    RISKFREE_RATE)
+print(f"Black-Scholes option price: {round(bsm_v, 2)}")
