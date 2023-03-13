@@ -44,10 +44,18 @@ class BrownianMotion(_Process):
         self.sigma = sigma
         super(BrownianMotion, self).__init__(**kwargs)
 
+    @staticmethod
+    def _drift(r, sigma, dt):
+        return (r - 1/2*sigma**2) * dt
+
+    @staticmethod
+    def _diffusion(sigma, dt, size):
+        return sigma * np.sqrt(dt) * dW(size)
+
     def dX(self):
-        drift_term = (self.r - 1/2*self.sigma**2)*self.dt
-        diffusion_term = self.sigma*np.sqrt(self.dt)*dW(self.paths)
-        return drift_term + diffusion_term
+        x1 = BrownianMotion._drift(self.r, self.sigma, self.dt)
+        x2 = BrownianMotion._diffusion(self.sigma, self.dt, self.paths)
+        return x1 + x2
 
 
 class Poisson(_Process):
@@ -55,8 +63,12 @@ class Poisson(_Process):
         self.xiP = xiP
         super(Poisson, self).__init__(**kwargs)
 
+    @staticmethod
+    def _jump(dt, xiP, size):
+        return np.random.poisson(xiP*dt, size)
+
     def dX(self):
-        return np.random.poisson(self.xiP*self.dt, self.paths)
+        return Poisson._jump(self.dt, self.xiP, self.paths)
 
 
 class StandardJumpDiffusion(_Process):
@@ -68,14 +80,24 @@ class StandardJumpDiffusion(_Process):
         self.xiP = xiP
         super(StandardJumpDiffusion, self).__init__(**kwargs)
 
+    @staticmethod
+    def _drift(r, sigma, xiP, muJ, sigmaJ, dt):
+        return (r - 1/2*sigma**2 - xiP*(np.exp(muJ+1/2*sigmaJ**2)-1))*dt
+
+    @staticmethod
+    def _jump(xiP, muJ, sigmaJ, dt, size):
+        return np.random.normal(muJ, sigmaJ, size) * np.random.poisson(xiP*dt, size)
+
+    @staticmethod
+    def _diffusion(sigma, dt, size):
+        return sigma * np.sqrt(dt) * dW(size)
+
     def dX(self):
-        drift_term = self.dt * (
-            self.r - 1/2*self.sigma**2 -
-            self.xiP*(np.exp(self.muJ + 1/2*self.sigmaJ**2) - 1)
+        x1 = StandardJumpDiffusion._drift(
+            self.r, self.sigma, self.xiP, self.muJ, self.sigmaJ, self.dt
         )
-        diffusion_term = self.sigma * np.sqrt(self.dt) * dW(self.paths)
-        jump_term = (
-            np.random.normal(self.muJ, self.sigmaJ, self.paths) *
-            np.random.poisson(self.xiP*self.dt, self.paths)
+        x2 = StandardJumpDiffusion._jump(
+            self.xiP, self.muJ, self.sigmaJ, self.dt, self.paths
         )
-        return drift_term + diffusion_term + jump_term
+        x3 = StandardJumpDiffusion._diffusion(self.sigma, self.dt, self.paths)
+        return x1 + x2 + x3
