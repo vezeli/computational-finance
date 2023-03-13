@@ -26,7 +26,7 @@ for xs, t in dXt:
 _, (ax1, ax2) = plt.subplots(2,1)
 ax1.plot(ts, xss)
 ax1.grid()
-ax1.set_title("dX_t = (r - 1/2 sigma^2) dt - sigma dB_t")
+ax1.set_title("dX_t = (r - 1/2 sigma^2) dt + sigma dB_t")
 ax1.set_xlabel("t")
 ax1.set_ylabel("X_t")
 ax2.plot(ts, yss)
