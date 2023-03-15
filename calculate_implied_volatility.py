@@ -1,7 +1,8 @@
 from src.base import V
 from src.numerics import newton_raphson_method
+from src.utils import CallPut
 
-OPTION = 1
+OPTION = CallPut(1)
 PRICE = 5.00
 UNDERLYING_PRICE = 100.00
 STRIKE = 120.00

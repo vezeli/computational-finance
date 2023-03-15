@@ -4,7 +4,7 @@ import numpy as np
 import numpy.typing as npt
 import scipy.stats as st
 
-from src.utils import UnknownOptionTypeError
+from src.utils import CallPut, UnknownOptionTypeError
 
 
 def _d1(s: R, k: R, tau: R, sigma: R, r: R) -> R:
@@ -19,7 +19,7 @@ def _tau(T: R, t: R) -> R:
     return T-t
 
 
-def V(cp: int, s: R, k: R, T: R, t: R, sigma: R, r: R) -> R:
+def V(cp: CallPut, s: R, k: R, T: R, t: R, sigma: R, r: R) -> R:
     tau = _tau(T, t)
     d1, d2 = _d1(s, k, tau, sigma, r), _d2(s, k, tau, sigma, r)
     if cp == 1:

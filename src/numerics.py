@@ -1,9 +1,19 @@
 from numbers import Real as R
 
 from src.base import V, dVdS
+from src.utils import CallPut
 
 
-def newton_raphson_method(cp: int, v_market: R, s: R, k: R, T: R, t: R, sigma0: R, r: R) -> R:
+def newton_raphson_method(
+    cp: CallPut,
+    v_market: R,
+    s: R,
+    k: R,
+    T: R,
+    t: R,
+    sigma0: R,
+    r: R
+) -> R:
     ERR = 1E-10
 
     def option_price(sigma: R) -> R:
