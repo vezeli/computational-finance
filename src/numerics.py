@@ -1,14 +1,16 @@
+from numbers import Real as R
+
 from src.base import V, dVdS
 
 
-def newton_raphson_method(cp, v_market, s, k, T, t, sigma0, r):
+def newton_raphson_method(cp: int, v_market: R, s: R, k: R, T: R, t: R, sigma0: R, r: R) -> R:
     ERR = 1E-10
 
-    def option_price(sigma):
+    def option_price(sigma: R) -> R:
         nonlocal cp, s, k, T, t, r
         return V(cp, s, k, T, t, sigma, r)
 
-    def vega(sigma):
+    def vega(sigma: R) -> R:
         nonlocal s, k, T, t, r
         return dVdS(s, k, T, t, sigma, r)
 

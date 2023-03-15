@@ -1,22 +1,25 @@
+from numbers import Real as R
+
 import numpy as np
+import numpy.typing as npt
 import scipy.stats as st
 
 from src.utils import UnknownOptionTypeError
 
 
-def _d1(s, k, tau, sigma, r):
+def _d1(s: R, k: R, tau: R, sigma: R, r: R) -> R:
     return  (np.log(s/k) + (r + 0.5*np.power(sigma, 2)*tau)) / (sigma*np.sqrt(tau))
 
 
-def _d2(s, k, tau, sigma, r):
+def _d2(s: R, k: R, tau: R, sigma: R, r: R) -> R:
     return _d1(s, k, tau, sigma, r) - sigma * np.sqrt(tau)
 
 
-def _tau(T, t):
+def _tau(T: R, t: R) -> R:
     return T-t
 
 
-def V(cp, s, k, T, t, sigma, r):
+def V(cp: int, s: R, k: R, T: R, t: R, sigma: R, r: R) -> R:
     tau = _tau(T, t)
     d1, d2 = _d1(s, k, tau, sigma, r), _d2(s, k, tau, sigma, r)
     if cp == 1:
@@ -29,18 +32,18 @@ def V(cp, s, k, T, t, sigma, r):
     return rv
 
 
-def dVdS(s, k, T, t, sigma, r):
+def dVdS(s: R, k: R, T: R, t: R, sigma: R, r: R) -> R:
     tau = _tau(T, t)
     d2 = _d2(s, k, tau, sigma, r)
     return k*np.exp(-r*tau)*st.norm.pdf(d2)*np.sqrt(tau)
 
 
-def dN(mu, sigma, n):
+def dN(mu: R, sigma: R, n: int) -> npt.NDArray[R]:
     """Returns normal distribution that converges faster to N(\mu, \sigma)"""
     z = np.random.normal(mu, sigma, n)
     z_mod = (z - np.mean(z)) / np.std(z)
     return z_mod
 
 
-def dW(n):
+def dW(n: int) -> npt.NDArray[R]:
     return dN(0, 1, n)

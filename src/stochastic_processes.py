@@ -1,10 +1,13 @@
+from numbers import Real as R
+
 import numpy as np
+import numpy.typing as npt
 
 from src.base import dN, dW
 
 
 class _Process:
-    def __init__(self, xs, t, dt):
+    def __init__(self, xs: npt.NDArray[R], t: R, dt: R):
         self.xs = xs
         self.t = t
         self.dt = dt
@@ -14,7 +17,7 @@ class _Process:
         return self._xs
 
     @xs.setter
-    def xs(self, value):
+    def xs(self, value: R):
         self._xs = value
 
     @property
@@ -22,7 +25,7 @@ class _Process:
         return self._t
 
     @t.setter
-    def t(self, value):
+    def t(self, value: R):
         self._t = value
 
     @property
@@ -39,40 +42,40 @@ class _Process:
 
 
 class BrownianMotion(_Process):
-    def __init__(self, r, sigma, **kwargs):
+    def __init__(self, r: R, sigma: R, **kwargs):
         self.r = r
         self.sigma = sigma
         super(BrownianMotion, self).__init__(**kwargs)
 
     @staticmethod
-    def _drift(r, sigma, dt):
+    def _drift(r: R, sigma: R, dt: R) -> R:
         return (r - 1/2*sigma**2) * dt
 
     @staticmethod
-    def _diffusion(sigma, dt, size):
+    def _diffusion(sigma: R, dt: R, size: int) -> npt.NDArray[R]:
         return sigma * np.sqrt(dt) * dW(size)
 
-    def dX(self):
+    def dX(self) -> npt.NDArray[R]:
         x1 = BrownianMotion._drift(self.r, self.sigma, self.dt)
         x2 = BrownianMotion._diffusion(self.sigma, self.dt, self.paths)
         return x1 + x2
 
 
 class Poisson(_Process):
-    def __init__(self, xiP, **kwargs):
+    def __init__(self, xiP: R, **kwargs):
         self.xiP = xiP
         super(Poisson, self).__init__(**kwargs)
 
     @staticmethod
-    def _jump(dt, xiP, size):
+    def _jump(dt, xiP: R, size: int) -> npt.NDArray[R]:
         return np.random.poisson(xiP*dt, size)
 
-    def dX(self):
+    def dX(self) -> npt.NDArray[R]:
         return Poisson._jump(self.dt, self.xiP, self.paths)
 
 
 class StandardJumpDiffusion(_Process):
-    def __init__(self, r, sigma, muJ, sigmaJ, xiP, **kwargs):
+    def __init__(self, r: R, sigma: R, muJ: R, sigmaJ: R, xiP: R, **kwargs):
         self.r = r
         self.sigma = sigma
         self.muJ = muJ
@@ -81,18 +84,18 @@ class StandardJumpDiffusion(_Process):
         super(StandardJumpDiffusion, self).__init__(**kwargs)
 
     @staticmethod
-    def _drift(r, sigma, xiP, muJ, sigmaJ, dt):
+    def _drift(r: R, sigma: R, xiP: R, muJ: R, sigmaJ: R, dt: R) -> R:
         return (r - 1/2*sigma**2 - xiP*(np.exp(muJ+1/2*sigmaJ**2)-1))*dt
 
     @staticmethod
-    def _jump(xiP, muJ, sigmaJ, dt, size):
+    def _jump(xiP: R, muJ: R, sigmaJ: R, dt: R, size: int) -> npt.NDArray[R]:
         return np.random.normal(muJ, sigmaJ, size) * np.random.poisson(xiP*dt, size)
 
     @staticmethod
-    def _diffusion(sigma, dt, size):
+    def _diffusion(sigma: R, dt: R, size: int) -> npt.NDArray[R]:
         return sigma * np.sqrt(dt) * dW(size)
 
-    def dX(self):
+    def dX(self) -> npt.NDArray[R]:
         x1 = StandardJumpDiffusion._drift(
             self.r, self.sigma, self.xiP, self.muJ, self.sigmaJ, self.dt
         )
