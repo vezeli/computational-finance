@@ -7,42 +7,42 @@ from src.base import dN, dW
 
 
 class _Process:
-    def __init__(self, xs: npt.NDArray[R], t: R, dt: R):
+    def __init__(self, xs: npt.NDArray[R], t: R, dt: R) -> None:
         self.xs = xs
         self.t = t
         self.dt = dt
 
     @property
-    def xs(self):
+    def xs(self) -> npt.NDArray[R]:
         return self._xs
 
     @xs.setter
-    def xs(self, value: R):
+    def xs(self, value: R) -> None:
         self._xs = value
 
     @property
-    def t(self):
+    def t(self) -> R:
         return self._t
 
     @t.setter
-    def t(self, value: R):
+    def t(self, value: R) -> None:
         self._t = value
 
     @property
-    def paths(self):
+    def paths(self) -> int:
         return np.shape(self.xs)[0]
 
     def __iter__(self):
         return self
 
-    def __next__(self):
+    def __next__(self) -> tuple[npt.NDArray[R], R]:
         self.xs += self.dX()
         self.t += self.dt
         return (self.xs, self.t)
 
 
 class BrownianMotion(_Process):
-    def __init__(self, r: R, sigma: R, **kwargs):
+    def __init__(self, r: R, sigma: R, **kwargs) -> None:
         self.r = r
         self.sigma = sigma
         super(BrownianMotion, self).__init__(**kwargs)
@@ -62,7 +62,7 @@ class BrownianMotion(_Process):
 
 
 class Poisson(_Process):
-    def __init__(self, xiP: R, **kwargs):
+    def __init__(self, xiP: R, **kwargs) -> None:
         self.xiP = xiP
         super(Poisson, self).__init__(**kwargs)
 
@@ -75,7 +75,7 @@ class Poisson(_Process):
 
 
 class StandardJumpDiffusion(_Process):
-    def __init__(self, r: R, sigma: R, muJ: R, sigmaJ: R, xiP: R, **kwargs):
+    def __init__(self, r: R, sigma: R, muJ: R, sigmaJ: R, xiP: R, **kwargs) -> None:
         self.r = r
         self.sigma = sigma
         self.muJ = muJ
