@@ -41,11 +41,11 @@ class _Process:
         return (self.xs, self.t)
 
 
-class BrownianMotion(_Process):
+class BrownianMotionWithDrift(_Process):
     def __init__(self, r: R, sigma: R, **kwargs) -> None:
         self.r = r
         self.sigma = sigma
-        super(BrownianMotion, self).__init__(**kwargs)
+        super(BrownianMotionWithDrift, self).__init__(**kwargs)
 
     @staticmethod
     def _drift(r: R, sigma: R, dt: R) -> R:
@@ -56,8 +56,8 @@ class BrownianMotion(_Process):
         return sigma * np.sqrt(dt) * dW(size)
 
     def dX(self) -> npt.NDArray[R]:
-        x1 = BrownianMotion._drift(self.r, self.sigma, self.dt)
-        x2 = BrownianMotion._diffusion(self.sigma, self.dt, self.paths)
+        x1 = BrownianMotionWithDrift._drift(self.r, self.sigma, self.dt)
+        x2 = BrownianMotionWithDrift._diffusion(self.sigma, self.dt, self.paths)
         return x1 + x2
 
 
