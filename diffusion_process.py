@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.stochastic_processes import BrownianMotionWithDrift
+from src.stochastic_processes import StandardDiffusion
 
 PATHS = 25
 PRICE = 100.00
@@ -13,7 +13,7 @@ VOLATILITY = 0.20
 ys = PRICE * np.ones(PATHS)
 xs = np.log(ys) * np.ones(PATHS)
 xss, yss, ts = np.array([xs]), np.array([ys]), np.array(START_TIME)
-dXt = BrownianMotionWithDrift(r=RISKFREE_RATE, sigma=VOLATILITY, xs=xs, t=START_TIME, dt=TIMESTEP)
+dXt = StandardDiffusion(r=RISKFREE_RATE, sigma=VOLATILITY, xs=xs, t=START_TIME, dt=TIMESTEP)
 for xs, t in dXt:
     xss = np.vstack([xss, xs])
     yss = np.vstack([yss, np.exp(xs)])
