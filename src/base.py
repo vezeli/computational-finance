@@ -46,5 +46,5 @@ def dN(mu: R, sigma: R, n: int) -> npt.NDArray[R]:
     return z
 
 
-def dW(n: int) -> npt.NDArray[R]:
-    return dN(0, 1, n)
+def dW(size: int) -> npt.NDArray[R]:
+    return dN(0, 1, size)
