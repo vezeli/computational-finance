@@ -10,7 +10,7 @@ class _Process:
     def __init__(self, xs: npt.NDArray[R], t: R, dt: R) -> None:
         self.xs = xs
         self.t = t
-        self.dt = dt
+        self._dt = dt
 
     @property
     def xs(self) -> npt.NDArray[R]:
@@ -27,6 +27,10 @@ class _Process:
     @t.setter
     def t(self, value: R) -> None:
         self._t = value
+
+    @property
+    def dt(self) -> R:
+        return self._dt
 
     @property
     def paths(self) -> int:
