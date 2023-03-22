@@ -41,8 +41,9 @@ def dVdS(s: R, k: R, T: R, t: R, sigma: R, r: R) -> R:
 def dN(mu: R, sigma: R, n: int) -> npt.NDArray[R]:
     """Returns normal distribution that converges faster to N(\mu, \sigma)"""
     z = np.random.normal(mu, sigma, n)
-    z_mod = (z - np.mean(z)) / np.std(z)
-    return z_mod
+    if n > 1:
+        z = (z - np.mean(z)) / np.std(z)
+    return z
 
 
 def dW(n: int) -> npt.NDArray[R]:
