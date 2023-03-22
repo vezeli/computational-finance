@@ -46,6 +46,19 @@ class _Process:
         return (self.xs, self.t)
 
 
+class BrownianMotion(_Process):
+    def __init__(sigma: R, **kwargs) -> None:
+        self.sigma = sigma
+        super(BrownianMotion, self).__init__(**kwargs)
+
+    @staticmethod
+    def _diffusion(sigma: R, dt: R, size: int) -> npt.NDArray[R]:
+        return sigma * np.sqrt(dt) * dW(size)
+
+    def dX(self) -> npt.NDArray[R]:
+        return BrownianMotion._diffusion(self.sigma, self.dt, self.paths)
+
+
 class CorrelatedBrownianMotions:
     def __init__(
             self,
@@ -126,13 +139,9 @@ class StandardDiffusion(_Process):
     def _drift(r: R, sigma: R, dt: R) -> R:
         return (r - 1/2*sigma**2) * dt
 
-    @staticmethod
-    def _diffusion(sigma: R, dt: R, size: int) -> npt.NDArray[R]:
-        return sigma * np.sqrt(dt) * dW(size)
-
     def dX(self) -> npt.NDArray[R]:
         x1 = StandardDiffusion._drift(self.r, self.sigma, self.dt)
-        x2 = StandardDiffusion._diffusion(self.sigma, self.dt, self.paths)
+        x2 = BrownianMotion._diffusion(self.sigma, self.dt, self.paths)
         return x1 + x2
 
 
@@ -166,10 +175,6 @@ class StandardJumpDiffusion(_Process):
     def _jump(xiP: R, muJ: R, sigmaJ: R, dt: R, size: int) -> npt.NDArray[R]:
         return np.random.normal(muJ, sigmaJ, size) * np.random.poisson(xiP*dt, size)
 
-    @staticmethod
-    def _diffusion(sigma: R, dt: R, size: int) -> npt.NDArray[R]:
-        return sigma * np.sqrt(dt) * dW(size)
-
     def dX(self) -> npt.NDArray[R]:
         x1 = StandardJumpDiffusion._drift(
             self.r, self.sigma, self.xiP, self.muJ, self.sigmaJ, self.dt
@@ -177,5 +182,5 @@ class StandardJumpDiffusion(_Process):
         x2 = StandardJumpDiffusion._jump(
             self.xiP, self.muJ, self.sigmaJ, self.dt, self.paths
         )
-        x3 = StandardJumpDiffusion._diffusion(self.sigma, self.dt, self.paths)
+        x3 = BrownianMotion._diffusion(self.sigma, self.dt, self.paths)
         return x1 + x2 + x3
