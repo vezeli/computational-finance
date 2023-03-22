@@ -1,4 +1,5 @@
 from numbers import Real as R
+from typing import Callable
 
 import numpy as np
 import numpy.typing as npt
@@ -43,6 +44,76 @@ class _Process:
         self.xs += self.dX()
         self.t += self.dt
         return (self.xs, self.t)
+
+
+class CorrelatedBrownianMotions:
+    def __init__(
+            self,
+            rho: R,
+            mu1: R,
+            mu2: R,
+            sigma1: R,
+            sigma2: R,
+            xs: npt.NDArray[R],
+            t: R,
+            dt: R,
+        ) -> None:
+
+        if not (-1 <= rho <= 1):
+            raise ValueError
+
+        if not (sigma1 > 0 and sigma2 > 0):
+            raise ValueError
+
+        if not (np.shape(xs)[0] == 2):
+            raise ValueError
+
+        self._rho = rho
+        self.dW1 = lambda: dN(mu1, sigma1, 1)
+        self.dW2 = lambda: dN(mu2, sigma2, 1)
+        self.xs = xs
+        self.t = t
+        self._dt = dt
+
+    @property
+    def rho(self) -> R:
+        return self._rho
+
+    @property
+    def xs(self) -> R:
+        return self._xs
+
+    @xs.setter
+    def xs(self, vs: npt.NDArray[R]) -> None:
+        self._xs = vs
+
+    @property
+    def t(self) -> R:
+        return self._t
+
+    @t.setter
+    def t(self, v: R) -> None:
+        self._t = v
+
+    @property
+    def dt(self) -> R:
+        return self._dt
+
+    def __iter__(self):
+        return self
+
+    @staticmethod
+    def dX(rho: R, dW1: Callable, dW2: Callable) -> npt.NDArray[R]:
+        c = np.linalg.cholesky(
+                correlation_matrix := np.array([[1, rho], [rho, 1]])
+        )
+        dW = np.array([dW1(), dW2()])
+        return c@dW
+
+    def __next__(self) -> tuple[R, R, R]:
+        self.xs += self.dX(self.rho, self.dW1, self.dW2)
+        self.t += self.dt
+        return (self.xs[0], self.xs[1], self.t)
 
 
 class StandardDiffusion(_Process):
