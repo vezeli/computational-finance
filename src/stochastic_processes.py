@@ -61,6 +61,7 @@ class BrownianMotion(_Process):
 
 class CorrelatedBrownianMotions(_Process):
     def __init__( self, rho: R, sigma1: R, sigma2: R, **kwargs) -> None:
+        if not (-1 < rho < 1) : raise ValueError
         self.rho = rho
         self.sigma1 = sigma1
         self.sigma2 = sigma2
