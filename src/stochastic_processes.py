@@ -1,10 +1,9 @@
 from numbers import Real as R
-from typing import Callable
 
 import numpy as np
 import numpy.typing as npt
 
-from src.base import dN, dW
+from src.base import dW
 
 
 class _Process:
@@ -122,7 +121,7 @@ class StandardJumpDiffusion(_Process):
 
     @staticmethod
     def _jump(xiP: R, muJ: R, sigmaJ: R, dt: R, size: int) -> npt.NDArray[R]:
-        return np.random.normal(muJ, sigmaJ, size) * np.random.poisson(xiP*dt, size)
+        return np.random.normal(muJ, sigmaJ, size) * Poisson._jump(dt, xiP, size)
 
     def dX(self) -> npt.NDArray[R]:
         x1 = StandardJumpDiffusion._drift(
