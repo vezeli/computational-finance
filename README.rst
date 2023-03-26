@@ -1,5 +1,7 @@
-This project implements examples of numerical methods commonly used in
-the field of quantitative finances.
+This project aims to provide a practical implementation of numerical
+methods commonly utilized in the field of quantitative finance. The
+examples included in the project demonstrate how these methods can be
+implemented and used to solve different financial problems.
 
 Requirements
 ============
@@ -12,8 +14,7 @@ and requires the following packages to be installed:
 * ``scipy``
 
 To install these packages, navigate to the root directory of the project
-using a terminal, and run the command ``python -m pip install -r
-requirements.txt``. 
+using a terminal, and run the command ``python -m pip install -r requirements.txt``. 
 
 Usage
 =====
