@@ -21,7 +21,7 @@ def run_simulation(rho, sigma1, sigma2):
         t=START_TIME,
         dt=TIMESTEP
     )
-    for dWs, t  in dWs_t:
+    for dWs, t in dWs_t:
         Ws = np.concatenate([Ws, dWs], axis=1)
         ts = np.append(ts, t)
         if t > END_TIME:
