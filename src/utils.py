@@ -1,3 +1,11 @@
+from numbers import Complex as C
+from typing import Callable
+
+i = complex(0, 1)
+
+CharacteristicFunction = Callable[[C], C]
+
+
 class CallPut(int):
     def __new__(cls, value):
         if value not in [1, -1]:
