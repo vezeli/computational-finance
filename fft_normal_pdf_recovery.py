@@ -55,7 +55,9 @@ pdf_theoretical = stats.norm.pdf(
     scale=STANDARD_DEVIATION
 )
 
-ax.plot(x, pdf_numerical, 'r-')
-ax.plot(x, pdf_theoretical, 'b--')
+ax.plot(x, pdf_numerical, "r-", label="numerical solution")
+ax.plot(x, pdf_theoretical, "b--", label="theoretical solution")
 ax.set_xlabel("x")
 ax.set_ylabel("$f_{NORMAL}(x)$")
+ax.legend()
+plt.show()
