@@ -48,7 +48,7 @@ def _fft_density_recovery(
     cf: CharacteristicFunction,
     xs: np.ndarray,
     n: N,
-    u_max: R
+    u_max: R,
 ) -> [np.ndarray, np.ndarray]:
     du = u_max / n
     u = np.arange(n) * du
@@ -71,10 +71,24 @@ def fft_density_recovery(
     cf: CharacteristicFunction,
     xs: np.ndarray,
     n: N,
-    u_max: R
+    u_max: R,
 ) -> np.ndarray:
     x, f = _fft_density_recovery(cf, xs, n, u_max)
 
     f2interpolate = interpolate.interp1d(x, f, kind="cubic")
 
     return f2interpolate(xs)
+
+
+def cos_density_recovery(
+    cf: CharacteristicFunction,
+    xs: np.ndarray,
+    n: N,
+) -> np.ndarray:
+    a, b = xs[0], xs[-1]
+    us = np.arange(n) * np.pi / (b - a)
+
+    F = 2 / (b - a) * np.real(cf(us) * np.exp(-i * us * a))
+    F[0] = 1 / 2 * F[0]  # correction for the first term in the Fourier expansion
+
+    return np.matmul(F, np.cos(np.outer(us, (xs - a))))
