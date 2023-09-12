@@ -27,7 +27,7 @@ integrate the characteristic equation in the phase space. Furthermore, increase
 `GRID_POINTS` to improve the convergence of the FFT algorithm.
 """
 
-_, ax = plt.subplots(1, 1, subplot_kw={'projection': '3d'})
+_, ax = plt.subplots(1, 1, subplot_kw={"projection": "3d"})
 
 u = np.linspace(0, UPPER_INTEGRATION_BOUNDARY, GRID_POINTS)
 
