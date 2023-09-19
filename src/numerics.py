@@ -84,8 +84,9 @@ def cos_density_recovery(
     cf: CharacteristicFunction,
     xs: np.ndarray,
     n: N,
+    a: R,
+    b: R,
 ) -> np.ndarray:
-    a, b = xs[0], xs[-1]
     us = np.arange(n) * np.pi / (b - a)
 
     F = 2 / (b - a) * np.real(cf(us) * np.exp(-i * us * a))
